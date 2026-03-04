@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* --- 主題顏色設定 (Theme Configuration) --- */
+    
+    /* 1. 品牌主色 (Brand Colors) */
+    --brand: #ACAFB5;              /* 主要按鈕、選取狀態 */
+    --brand-hover: #9ca0a8;        /* 懸停狀態 */
+    --brand-active: #8c9099;       /* 點擊狀態 */
+    --brand-light: #ACAFB54D;      /* 淺色背景/光暈 (約30%透明度) */
+
+    /* 2. 背景顏色 (Backgrounds) */
+    --bg-main: #F5F5F7;            /* 應用程式最底層背景 */
+    --bg-surface: #FDFDFD;         /* 主要卡片、彈窗、容器背景 */
+    --bg-surface-secondary: #F8FAFC; /* 次要區塊背景 (如：輸入框群組) */
+    --bg-surface-tertiary: #F1F5F9;  /* 第三級背景 (如：次要按鈕) */
+    --bg-overlay: rgba(0, 0, 0, 0.4); /* 遮罩背景 */
+
+    /* 3. 文字顏色 (Typography) */
+    --text-primary: #0F172A;       /* 主要標題、內文 */
+    --text-secondary: #334155;     /* 次要資訊、標籤 */
+    --text-muted: #64748B;         /* 輔助說明、預設文字 */
+    --text-inverse: #FFFFFF;       /* 反白文字 (如：深色按鈕上的文字) */
+
+    /* 4. 邊框與線條 (Borders) */
+    --border-light: #E2E8F0;       /* 淺色分隔線 */
+    --border-medium: #CBD5E1;      /* 一般邊框 */
+    --border-focus: var(--brand);  /* 聚焦時的邊框色 */
+
+    /* 5. 表單元件 (Forms) */
+    --input-bg: #FFFFFF;           /* 輸入框背景 */
+    --input-border: #E2E8F0;       /* 輸入框邊框 */
+    --input-placeholder: #94A3B8;  /* 提示文字顏色 */
+
+    /* 6. 狀態顏色 (Status Colors) */
+    /* 成功 (Success) - 低風險 */
+    --status-success: #10B981;
+    --status-success-bg: #ECFDF5;
+    --status-success-border: #A7F3D0;
+    --status-success-text: #059669;
+
+    /* 警告 (Warning) - 需注意 */
+    --status-warning: #EAB308;
+    --status-warning-bg: #FEFCE8;
+    --status-warning-border: #FEF08A;
+    --status-warning-text: #CA8A04;
+
+    /* 錯誤/危險 (Error/Danger) - 建議就醫 */
+    --status-error: #EF4444;
+    --status-error-bg: #FEF2F2;
+    --status-error-border: #FECACA;
+    --status-error-text: #DC2626;
+  }
+
+  /* 深色模式 (Dark Mode) */
+  .dark {
+    --bg-main: #030712;
+    --bg-surface: #0F172A;
+    --bg-surface-secondary: #1E293B;
+    --bg-surface-tertiary: #334155;
+    --bg-overlay: rgba(0, 0, 0, 0.7);
+
+    --text-primary: #F8FAFC;
+    --text-secondary: #CBD5E1;
+    --text-muted: #94A3B8;
+    --text-inverse: #0F172A;
+
+    --border-light: #1E293B;
+    --border-medium: #334155;
+
+    --input-bg: #020617;
+    --input-border: #1E293B;
+    --input-placeholder: #475569;
+
+    /* Dark mode status adjustments */
+    --status-success-bg: rgba(6, 95, 70, 0.2);
+    --status-success-border: #065F46;
+    --status-success-text: #34D399;
+
+    --status-warning-bg: rgba(133, 77, 14, 0.2);
+    --status-warning-border: #854D0E;
+    --status-warning-text: #FACC15;
+
+    --status-error-bg: rgba(127, 29, 29, 0.2);
+    --status-error-border: #7F1D1D;
+    --status-error-text: #F87171;
+  }
+
+  html, body {
+    font-weight: 700;
+  }
+}

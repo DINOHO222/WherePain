@@ -1,0 +1,5 @@
+{
+  "name": "Symptom Checker",
+  "description": "A PWA for interactive symptom tracking and AI-powered analysis.",
+  "requestFramePermissions": []
+}
