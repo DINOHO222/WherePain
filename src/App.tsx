@@ -40,7 +40,7 @@ export default function App() {
             <span>點擊下方人體模型選擇部位</span>
           </div>
 
-          <div className="flex-1 w-full flex items-center justify-center min-h-0">
+          <div className="flex-1 w-full flex items-center justify-center min-h-0 animate-in fade-in duration-1000 slide-in-from-bottom-4">
             <BodyModel 
               onSelect={handleSelectPart} 
               selectedPart={selectedPart} 
@@ -55,9 +55,12 @@ export default function App() {
           title="症狀描述"
         >
           {step === 'analyzing' ? (
-            <div className="flex flex-col items-center justify-center py-12 space-y-4">
-              <Loader2 className="h-10 w-10 animate-spin text-[var(--brand)]" />
-              <p className="text-[var(--text-muted)] animate-pulse">正在分析您的症狀...</p>
+            <div className="flex flex-col items-center justify-center py-12 space-y-4 animate-in fade-in zoom-in-95 duration-500">
+              <div className="relative">
+                <Loader2 className="h-12 w-12 animate-spin text-[var(--brand)]" />
+                <div className="absolute inset-0 animate-ping opacity-20 bg-[var(--brand)] rounded-full" />
+              </div>
+              <p className="text-[var(--text-muted)] animate-pulse font-medium">正在分析您的症狀...</p>
             </div>
           ) : (
             selectedPart && (

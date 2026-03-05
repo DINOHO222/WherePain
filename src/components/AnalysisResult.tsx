@@ -3,6 +3,7 @@ import { AnalysisResult as AnalysisResultType } from '@/types';
 import { Button } from '@/components/Button';
 import { AlertTriangle, CheckCircle, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { URGENCY_CONFIG } from '@/constants';
 
 interface AnalysisResultProps {
   result: AnalysisResultType;
@@ -10,40 +11,23 @@ interface AnalysisResultProps {
 }
 
 export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset }) => {
-  const urgencyConfig = {
-    low: {
-      color: 'text-[var(--status-success-text)]',
-      bg: 'bg-[var(--status-success-bg)]',
-      border: 'border-[var(--status-success-border)]',
-      icon: CheckCircle,
-      label: '低風險'
-    },
-    medium: {
-      color: 'text-[var(--status-warning-text)]',
-      bg: 'bg-[var(--status-warning-bg)]',
-      border: 'border-[var(--status-warning-border)]',
-      icon: Info,
-      label: '需注意'
-    },
-    high: {
-      color: 'text-[var(--status-error-text)]',
-      bg: 'bg-[var(--status-error-bg)]',
-      border: 'border-[var(--status-error-border)]',
-      icon: AlertTriangle,
-      label: '建議就醫'
-    }
-  };
-
-  const config = urgencyConfig[result.urgency] || urgencyConfig.low;
-  const Icon = config.icon;
+  const config = URGENCY_CONFIG[result.urgency] || URGENCY_CONFIG.low;
+  
+  const Icon = {
+    low: CheckCircle,
+    medium: Info,
+    high: AlertTriangle
+  }[result.urgency] || CheckCircle;
 
   return (
     <div className="space-y-6">
-      <div className={cn(
-        "p-4 rounded-xl border flex items-start gap-4",
-        config.bg,
-        config.border
-      )}>
+      <div 
+        className={cn(
+          "p-4 rounded-xl border flex items-start gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500",
+          config.bg,
+          config.border
+        )}
+      >
         <Icon className={cn("w-6 h-6 shrink-0 mt-0.5", config.color)} />
         <div>
           <h3 className={cn("font-bold text-lg mb-1", config.color)}>
@@ -55,7 +39,10 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div 
+        className="space-y-2 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-backwards"
+        style={{ animationDelay: '150ms' }}
+      >
         <h4 className="font-bold text-[var(--text-primary)] flex items-center gap-2">
           <span className="w-1 h-4 bg-[var(--brand)] rounded-full"/>
           建議處置
@@ -65,13 +52,19 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
         </div>
       </div>
 
-      <div className="pt-4">
+      <div 
+        className="pt-4 animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-backwards"
+        style={{ animationDelay: '300ms' }}
+      >
         <Button onClick={onReset} className="w-full" size="lg">
           再次檢測
         </Button>
       </div>
       
-      <p className="text-xs text-center text-[var(--text-muted)] mt-4">
+      <p 
+        className="text-xs text-center text-[var(--text-muted)] mt-4 animate-in fade-in duration-700 fill-mode-backwards"
+        style={{ animationDelay: '500ms' }}
+      >
         注意：本結果僅供參考，並非正式醫療診斷。如有嚴重不適請立即就醫。
       </p>
     </div>

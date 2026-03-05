@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { SymptomData, AnalysisResult } from '@/types';
+import { BODY_PART_LABELS, DURATION_LABELS } from '@/constants';
 
 // Lazy initialization of Gemini API
 let ai: GoogleGenAI | null = null;
@@ -60,32 +61,10 @@ export const analyzeSymptoms = async (data: SymptomData): Promise<AnalysisResult
 };
 
 function translateBodyPart(part: string | null): string {
-  const map: Record<string, string> = {
-    'head': '頭部',
-    'neck': '頸部',
-    'chest': '胸部',
-    'upper_stomach': '上腹部',
-    'lower_stomach': '下腹部',
-    'back': '背部',
-    'left_arm': '左手臂',
-    'right_arm': '右手臂',
-    'left_hand': '左手',
-    'right_hand': '右手',
-    'left_leg': '左腿',
-    'right_leg': '右腿',
-    'left_foot': '左腳',
-    'right_foot': '右腳'
-  };
-  return part ? map[part] || part : '未指定';
+  if (!part) return '未指定';
+  return BODY_PART_LABELS[part as keyof typeof BODY_PART_LABELS] || part;
 }
 
 function translateDuration(duration: string): string {
-  const map: Record<string, string> = {
-    'today': '今天開始',
-    'few_days': '持續幾天',
-    'one_week': '約一週',
-    'one_month': '約一個月',
-    'chronic': '長期慢性'
-  };
-  return map[duration] || duration;
+  return DURATION_LABELS[duration as keyof typeof DURATION_LABELS] || duration;
 }
