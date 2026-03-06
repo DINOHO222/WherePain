@@ -30,8 +30,34 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // Always bypass cache for Vercel API and Vite assets (which change names every build)
+  if (event.request.url.includes('/api/') || event.request.url.includes('/assets/')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // For everything else, use Network-First strategy (fallback to cache if offline)
   event.respondWith(
-    caches.match(event.request)
-      .then((response) => response || fetch(event.request))
+    fetch(event.request)
+      .then((networkResponse) => {
+        // Cache the new response for future offline use (optional, but good for PWA)
+        if (networkResponse.ok) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        // If network fails, try the cache
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          // If offline and not in cache, let it fail naturally
+          throw new Error('Network and cache both failed');
+        });
+      })
   );
 });
