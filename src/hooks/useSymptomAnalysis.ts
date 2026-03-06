@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BodyPart, SymptomData, AnalysisResult } from '@/types';
 import { analyzeSymptoms } from '@/services/gemini';
+import { saveHistory } from '@/services/history';
 
 export function useSymptomAnalysis() {
   const [step, setStep] = useState<'selecting' | 'inputting' | 'analyzing' | 'result'>('selecting');
@@ -23,6 +24,14 @@ export function useSymptomAnalysis() {
       const analysis = await analyzeSymptoms(data);
       setResult(analysis);
       setStep('result');
+      
+      // Save to history
+      saveHistory({
+        id: crypto.randomUUID(),
+        timestamp: new Date().toISOString(),
+        symptomData: data,
+        analysisResult: analysis
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : '發生未知錯誤');
       setStep('inputting'); // Go back to input on error so user can retry

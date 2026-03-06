@@ -25,3 +25,10 @@ export interface AnalysisResult {
   recommendation: string;
   urgency: 'low' | 'medium' | 'high';
 }
+
+export interface HistoryRecord {
+  id: string;
+  timestamp: string;
+  symptomData: SymptomData;
+  analysisResult: AnalysisResult;
+}
