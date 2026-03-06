@@ -87,8 +87,11 @@ export const BodyModel: React.FC<BodyModelProps> = ({ onSelect, selectedPart }) 
           pinch={{ step: 5 }}
           doubleClick={{ disabled: true }}
         >
-          <TransformComponent wrapperClass="w-full h-full" contentClass="w-full h-full">
-            <div className="relative w-full h-full">
+          <TransformComponent
+            wrapperStyle={{ width: '100%', height: '100%' }}
+            contentStyle={{ width: '100%', height: '100%' }}
+          >
+            <div className="relative w-full h-full flex items-center justify-center">
               {/* Realistic Body Image */}
               <img
                 src={BODY_IMAGE_URL}
@@ -106,7 +109,7 @@ export const BodyModel: React.FC<BodyModelProps> = ({ onSelect, selectedPart }) 
               {/* Interactive SVG Overlay */}
               <svg
                 viewBox="0 0 220 500"
-                className="absolute inset-0 w-full h-full z-10 overflow-visible"
+                className="absolute inset-0 w-full h-full z-10 overflow-visible pointer-events-none"
                 preserveAspectRatio="xMidYMid meet"
               >
                 {BODY_PATHS.map((path) => (
