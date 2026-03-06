@@ -24,8 +24,8 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-main)] text-[var(--text-primary)] font-sans selection:bg-[var(--brand)]/30 flex flex-col">
-      <header className="sticky top-0 z-30 w-full border-b border-[var(--border-light)] bg-[var(--bg-surface)]/80 backdrop-blur supports-[backdrop-filter]:bg-[var(--bg-surface)]/60 shrink-0">
-        <div className="container flex h-14 max-w-screen-2xl items-center justify-between px-4 relative">
+      <header className="sticky top-0 z-30 w-full border-b border-[var(--border-light)] bg-[var(--bg-surface)]/80 backdrop-blur supports-[backdrop-filter]:bg-[var(--bg-surface)]/60 shrink-0 flex justify-center">
+        <div className="w-full max-w-md flex h-14 items-center justify-between px-4 relative">
           {/* Centered Logo */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <img
