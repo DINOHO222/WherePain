@@ -15,7 +15,8 @@ export const getHistory = (): HistoryRecord[] => {
 export const saveHistory = (record: HistoryRecord) => {
   try {
     const history = getHistory();
-    const newHistory = [record, ...history];
+    // Keep only the most recent 50 records to prevent QuotaExceededError
+    const newHistory = [record, ...history].slice(0, 50);
     localStorage.setItem(HISTORY_KEY, JSON.stringify(newHistory));
   } catch (error) {
     console.error('Failed to save history:', error);

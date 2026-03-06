@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { BodyPart, SymptomData, AnalysisResult } from '@/types';
 import { analyzeSymptoms } from '@/services/gemini';
 import { saveHistory } from '@/services/history';
+import { useToast } from '@/hooks/useToast';
 
 export function useSymptomAnalysis() {
   const [step, setStep] = useState<'selecting' | 'inputting' | 'analyzing' | 'result'>('selecting');
   const [selectedPart, setSelectedPart] = useState<BodyPart | null>(null);
   const [symptomData, setSymptomData] = useState<SymptomData | null>(null);
   const [result, setResult] = useState<AnalysisResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const toast = useToast();
 
   const handleSelectPart = (part: BodyPart) => {
     setSelectedPart(part);
@@ -18,13 +19,12 @@ export function useSymptomAnalysis() {
   const handleInputSubmit = async (data: SymptomData) => {
     setSymptomData(data);
     setStep('analyzing');
-    setError(null);
 
     try {
       const analysis = await analyzeSymptoms(data);
       setResult(analysis);
       setStep('result');
-      
+
       // Save to history
       saveHistory({
         id: crypto.randomUUID(),
@@ -32,8 +32,9 @@ export function useSymptomAnalysis() {
         symptomData: data,
         analysisResult: analysis
       });
+      toast.success('分析完成，已儲存至歷史紀錄');
     } catch (err) {
-      setError(err instanceof Error ? err.message : '發生未知錯誤');
+      toast.error(err instanceof Error ? err.message : '發生未知錯誤');
       setStep('inputting'); // Go back to input on error so user can retry
     }
   };
@@ -43,7 +44,6 @@ export function useSymptomAnalysis() {
     setSelectedPart(null);
     setSymptomData(null);
     setResult(null);
-    setError(null);
   };
 
   const handleCancelInput = () => {
@@ -55,7 +55,6 @@ export function useSymptomAnalysis() {
     step,
     selectedPart,
     result,
-    error,
     handleSelectPart,
     handleInputSubmit,
     handleReset,

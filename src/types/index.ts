@@ -24,6 +24,7 @@ export interface AnalysisResult {
   possibleCondition: string;
   recommendation: string;
   urgency: 'low' | 'medium' | 'high';
+  medicalDepartment?: string;
 }
 
 export interface HistoryRecord {

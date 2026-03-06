@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BodyModel } from '@/components/BodyModel';
 import { Modal } from '@/components/Modal';
 import { SymptomForm } from '@/components/SymptomForm';
 import { AnalysisResult } from '@/components/AnalysisResult';
 import { HistoryList } from '@/components/HistoryList';
 import { useSymptomAnalysis } from '@/hooks/useSymptomAnalysis';
-import { Loader2, MessageSquareText } from 'lucide-react';
+import { SkeletonAnalysis } from '@/components/SkeletonAnalysis';
+import { ToastProvider } from '@/hooks/useToast';
+import { MessageSquareText } from 'lucide-react';
 
-export default function App() {
+function AppContent() {
   const [view, setView] = useState<'home' | 'history'>('home');
-  
+
   const {
     step,
     selectedPart,
     result,
-    error,
     handleSelectPart,
     handleInputSubmit,
     handleReset,
@@ -27,9 +28,9 @@ export default function App() {
         <div className="container flex h-14 max-w-screen-2xl items-center justify-between px-4 relative">
           {/* Centered Logo */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <img 
-              src="/logo.png" 
-              alt="Logo" 
+            <img
+              src="/logo.png"
+              alt="Logo"
               className="h-8 w-auto object-contain select-none cursor-pointer"
               onClick={() => setView('home')}
               onError={(e) => {
@@ -63,9 +64,9 @@ export default function App() {
             </div>
 
             <div className="flex-1 w-full flex items-center justify-center min-h-0 animate-in fade-in duration-1000 slide-in-from-bottom-4">
-              <BodyModel 
-                onSelect={handleSelectPart} 
-                selectedPart={selectedPart} 
+              <BodyModel
+                onSelect={handleSelectPart}
+                selectedPart={selectedPart}
               />
             </div>
           </div>
@@ -78,13 +79,7 @@ export default function App() {
           title="症狀描述"
         >
           {step === 'analyzing' ? (
-            <div className="flex flex-col items-center justify-center py-12 space-y-4 animate-in fade-in zoom-in-95 duration-500">
-              <div className="relative">
-                <Loader2 className="h-12 w-12 animate-spin text-[var(--brand)]" />
-                <div className="absolute inset-0 animate-ping opacity-20 bg-[var(--brand)] rounded-full" />
-              </div>
-              <p className="text-[var(--text-muted)] animate-pulse font-medium">正在分析您的症狀...</p>
-            </div>
+            <SkeletonAnalysis />
           ) : (
             selectedPart && (
               <SymptomForm
@@ -110,14 +105,15 @@ export default function App() {
             />
           )}
         </Modal>
-
-        {/* Error Toast (Simple implementation) */}
-        {error && (
-          <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-[var(--status-error)] text-white px-4 py-2 rounded-xl shadow-lg text-sm font-medium animate-in fade-in slide-in-from-bottom-4 z-50">
-            {error}
-          </div>
-        )}
       </main>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ToastProvider>
+      <AppContent />
+    </ToastProvider>
   );
 }

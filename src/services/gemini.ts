@@ -1,70 +1,24 @@
-import { GoogleGenAI } from "@google/genai";
 import { SymptomData, AnalysisResult } from '@/types';
-import { BODY_PART_LABELS, DURATION_LABELS } from '@/constants';
-
-// Lazy initialization of Gemini API
-let ai: GoogleGenAI | null = null;
-
-const getAiClient = () => {
-  if (!ai) {
-    // Use import.meta.env for Vite environment variables
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    if (apiKey) {
-      ai = new GoogleGenAI({ apiKey });
-    }
-  }
-  return ai;
-};
 
 export const analyzeSymptoms = async (data: SymptomData): Promise<AnalysisResult> => {
-  const client = getAiClient();
-  if (!client) {
-    throw new Error("Gemini API Key is missing. Please configure VITE_GEMINI_API_KEY in your environment.");
-  }
-
-  const prompt = `
-    作為一名專業的醫療AI助手，請根據以下症狀進行初步分析：
-    
-    疼痛部位: ${translateBodyPart(data.bodyPart)} (${data.side === 'front' ? '正面' : '背面'})
-    疼痛程度: ${data.painLevel}/10
-    持續時間: ${translateDuration(data.duration)}
-    其他描述: ${data.description || '無'}
-
-    請以JSON格式回傳結果，包含以下欄位：
-    1. possibleCondition (可能的情況，簡短描述)
-    2. recommendation (建議採取的行動，如休息、就醫等)
-    3. urgency (緊急程度: low, medium, high)
-
-    請確保回應是純JSON格式，不要包含Markdown標記。
-  `;
-
   try {
-    const response = await client.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json"
-      }
+    const response = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ symptomData: data }),
     });
 
-    const responseText = response.text;
-    if (!responseText) {
-      throw new Error("No response from AI");
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || 'Failed to analyze symptoms via server API');
     }
-    
-    const analysis = JSON.parse(responseText);
-    return analysis as AnalysisResult;
+
+    const result = await response.json();
+    return result as AnalysisResult;
   } catch (error) {
     console.error("Error analyzing symptoms:", error);
-    throw new Error("無法完成分析，請稍後再試。");
+    throw new Error('無法連線至後端伺服器進行分析，請確認。');
   }
 };
-
-function translateBodyPart(part: string | null): string {
-  if (!part) return '未指定';
-  return BODY_PART_LABELS[part as keyof typeof BODY_PART_LABELS] || part;
-}
-
-function translateDuration(duration: string): string {
-  return DURATION_LABELS[duration as keyof typeof DURATION_LABELS] || duration;
-}
