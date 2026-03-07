@@ -12,7 +12,7 @@ export const analyzeSymptoms = async (data: SymptomData): Promise<AnalysisResult
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || 'Failed to analyze symptoms via server API');
+      throw new Error(errorData.details || errorData.error || 'Failed to analyze symptoms via server API');
     }
 
     const result = await response.json();

@@ -1,4 +1,4 @@
-import { BodyPart, Duration } from '@/types';
+import { BodyPart, Duration } from './types';
 
 export const BODY_PART_LABELS: Record<BodyPart, string> = {
   // --- 正面 ---
