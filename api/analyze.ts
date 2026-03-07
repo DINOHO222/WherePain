@@ -1,5 +1,6 @@
 import { GoogleGenAI } from '@google/genai';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { BODY_PART_LABELS } from '../src/constants';
 
 // Initialize the API client using the secure server-side environment variable
 // Note: Vercel will inject process.env.GEMINI_API_KEY from your project settings
@@ -20,11 +21,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
         const { symptomData } = req.body;
 
-        if (!symptomData) {
-            return res.status(400).json({ error: 'Missing symptomData in request body' });
+        if (!symptomData || !symptomData.bodyParts) {
+            return res.status(400).json({ error: 'Missing symptomData or bodyParts in request body' });
         }
 
         const ai = getAiClient();
+
+        const partNames = symptomData.bodyParts.map((p: string) => BODY_PART_LABELS[p as keyof typeof BODY_PART_LABELS] || p).join('、 ') || '未指定';
 
         const prompt = `
       身為一位急診室的資深分診醫師，請根據以下病患主訴進行專業的初步醫療評估 (Triage)，並嚴格以下列 JSON 格式回傳，不要有任何多餘的文字：
@@ -42,7 +45,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       - 若病患症狀極端輕微、明顯為生理期正常現象、或不需要醫療介入，請將科別設為「不需就醫」。
 
       病患主訴：
-      部位：${symptomData.bodyPart || '未指定'} (${symptomData.side === 'front' ? '正面' : '背面'})
+      影響部位：${partNames}
       疼痛指數 (1-10)：${symptomData.painLevel}
       症狀長度：${symptomData.duration}
       其他描述：${symptomData.description || '無'}

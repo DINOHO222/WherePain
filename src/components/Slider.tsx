@@ -11,14 +11,14 @@ interface SliderProps {
   className?: string;
 }
 
-export const Slider: React.FC<SliderProps> = ({ 
-  value, 
-  onChange, 
-  min = 0, 
-  max = 10, 
-  step = 1, 
+export const Slider: React.FC<SliderProps> = ({
+  value,
+  onChange,
+  min = 0,
+  max = 10,
+  step = 1,
   label,
-  className 
+  className
 }) => {
   // Calculate color based on pain level (Green -> Yellow -> Red)
   const getColor = (val: number) => {
@@ -35,7 +35,7 @@ export const Slider: React.FC<SliderProps> = ({
             {label}
           </label>
           <span className={cn(
-            "text-sm font-bold px-2 py-0.5 rounded-lg text-white",
+            "text-sm font-bold px-2 py-0.5 rounded-xl text-white",
             getColor(value)
           )}>
             {value} / {max}

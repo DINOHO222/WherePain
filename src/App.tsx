@@ -7,7 +7,7 @@ import { HistoryList } from '@/components/HistoryList';
 import { useSymptomAnalysis } from '@/hooks/useSymptomAnalysis';
 import { SkeletonAnalysis } from '@/components/SkeletonAnalysis';
 import { ToastProvider } from '@/hooks/useToast';
-import { MessageSquareText } from 'lucide-react';
+import { MessageSquareText, RotateCcw } from 'lucide-react';
 
 function AppContent() {
   const [view, setView] = useState<'home' | 'history'>('home');
@@ -16,9 +16,11 @@ function AppContent() {
     step,
     viewSide,
     setViewSide,
-    selectedPart,
+    selectedParts,
     result,
     handleSelectPart,
+    handleConfirmSelection,
+    handleClearSelection,
     handleInputSubmit,
     handleReset,
     handleCancelInput
@@ -65,13 +67,36 @@ function AppContent() {
               <span>點擊下方人體模型選擇部位</span>
             </div>
 
-            <div className="flex-1 w-full flex items-center justify-center min-h-0 animate-in fade-in duration-1000 slide-in-from-bottom-4">
+            <div className="flex-1 w-full flex items-center justify-center min-h-0 animate-in fade-in duration-1000 slide-in-from-bottom-4 relative">
               <BodyModel
                 onSelect={handleSelectPart}
-                selectedPart={selectedPart}
+                selectedParts={selectedParts}
                 side={viewSide}
                 onSideChange={setViewSide}
               />
+
+              {/* Confirm & Reset Buttons */}
+              {selectedParts.length > 0 && step === 'selecting' && (
+                <>
+                  <div className="absolute bottom-6 left-4 z-30 animate-in fade-in slide-in-from-left-4 duration-300">
+                    <button
+                      onClick={handleClearSelection}
+                      className="bg-[var(--bg-surface)] text-[var(--status-error-text)] border border-[var(--status-error-border)] px-4 py-3 rounded-2xl font-bold shadow-lg shadow-[var(--status-error-bg)]/20 hover:bg-[var(--status-error-bg)] hover:scale-105 transition-all flex items-center gap-2"
+                    >
+                      <RotateCcw className="w-5 h-5" />
+                      重置
+                    </button>
+                  </div>
+                  <div className="absolute bottom-6 right-4 z-30 animate-in fade-in slide-in-from-right-4 duration-300">
+                    <button
+                      onClick={handleConfirmSelection}
+                      className="bg-[var(--brand)] text-white px-5 py-3 rounded-2xl font-bold shadow-lg shadow-[var(--brand)]/30 hover:bg-[var(--brand)]/90 hover:scale-105 transition-all flex items-center gap-2"
+                    >
+                      下一步 ({selectedParts.length})
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}
@@ -85,9 +110,9 @@ function AppContent() {
           {step === 'analyzing' ? (
             <SkeletonAnalysis />
           ) : (
-            selectedPart && (
+            selectedParts.length > 0 && (
               <SymptomForm
-                selectedPart={selectedPart}
+                selectedParts={selectedParts}
                 onSubmit={handleInputSubmit}
                 onCancel={handleCancelInput}
                 isLoading={step === 'analyzing'}

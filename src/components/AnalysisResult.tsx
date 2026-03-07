@@ -26,7 +26,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
     <div className="space-y-6">
       <div
         className={cn(
-          "p-4 rounded-xl border flex items-start gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500",
+          "p-4 rounded-2xl border flex items-start gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500",
           config.bg,
           config.border
         )}
@@ -50,7 +50,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
           <span className="w-1 h-4 bg-[var(--brand)] rounded-full" />
           建議處置
         </h4>
-        <div className="bg-[var(--bg-surface-secondary)] p-4 rounded-xl text-[var(--text-secondary)] text-sm leading-relaxed whitespace-pre-wrap break-words">
+        <div className="bg-[var(--bg-surface-secondary)] p-4 rounded-2xl text-[var(--text-secondary)] text-sm leading-relaxed whitespace-pre-wrap break-words">
           {result.recommendation}
 
           {department && department !== '不需就醫' && (
@@ -58,7 +58,7 @@ export const AnalysisResult: React.FC<AnalysisResultProps> = ({ result, onReset 
               href={mapUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[var(--bg-main)] border border-[var(--border-light)] text-[var(--text-primary)] rounded-lg hover:bg-[var(--bg-surface)] transition-colors active:scale-95"
+              className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[var(--bg-main)] border border-[var(--border-light)] text-[var(--text-primary)] rounded-xl hover:bg-[var(--bg-surface)] transition-colors active:scale-95"
             >
               <MapPin className="w-4 h-4 text-[var(--brand)]" />
               <span className="font-medium text-sm">尋找附近的{department}</span>

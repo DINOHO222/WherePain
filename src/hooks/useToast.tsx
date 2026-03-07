@@ -47,7 +47,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
                     <div
                         key={t.id}
                         className={cn(
-                            "flex items-center gap-3 w-full p-3 rounded-xl shadow-lg border animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-auto",
+                            "flex items-center gap-3 w-full p-3 rounded-2xl shadow-lg border animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-auto",
                             {
                                 'bg-[var(--status-error)] border-red-900/50 text-white': t.type === 'error',
                                 'bg-[var(--status-success)] border-green-900/50 text-white': t.type === 'success',
@@ -63,7 +63,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
 
                         <button
                             onClick={() => setToasts(prev => prev.filter(toast => toast.id !== t.id))}
-                            className="p-1 hover:bg-black/10 rounded-md transition-colors shrink-0"
+                            className="p-1 hover:bg-black/10 rounded-lg transition-colors shrink-0"
                             aria-label="Close notification"
                         >
                             <X className="w-4 h-4" />

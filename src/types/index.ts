@@ -39,8 +39,7 @@ export type Duration =
   | 'chronic';
 
 export interface SymptomData {
-  bodyPart: BodyPart | null;
-  side: 'front' | 'back';
+  bodyParts: BodyPart[];
   painLevel: PainLevel;
   duration: Duration;
   description?: string;

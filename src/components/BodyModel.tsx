@@ -3,13 +3,12 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 // ... inside InteractiveZone
 import { cn } from '@/lib/utils';
 import { BodyPart } from '@/types';
-import { BODY_PART_LABELS } from '@/constants';
 import { BODY_PATHS } from '@/data/body-paths';
 import { RotateCcw } from 'lucide-react';
 
 interface BodyModelProps {
   onSelect: (part: BodyPart) => void;
-  selectedPart: BodyPart | null;
+  selectedParts: BodyPart[];
   side: 'front' | 'back';
   onSideChange: (side: 'front' | 'back') => void;
 }
@@ -60,11 +59,12 @@ const InteractiveZone = memo(({
       tabIndex={0}
       aria-label={`選擇${name}`}
       aria-pressed={isSelected}
+      style={isSelected ? { filter: 'url(#glass-blur)' } : undefined}
       className={cn(
-        "cursor-pointer transition-colors duration-300 pointer-events-auto focus:outline-none focus:ring-2 focus:ring-[var(--brand)]/50 rounded-sm",
+        "cursor-pointer pointer-events-auto focus:outline-none focus:ring-2 focus:ring-red-500/50 rounded-sm",
         isSelected
-          ? "fill-[var(--brand)]/60 stroke-[var(--brand)] stroke-2"
-          : "fill-white/0 hover:fill-red-500/30 hover:stroke-red-500/50 stroke-transparent"
+          ? "fill-red-600/80 drop-shadow-[0_0_12px_rgba(220,38,38,0.7)] stroke-transparent"
+          : "fill-transparent hover:fill-red-400/20 stroke-transparent"
       )}
     >
       <title>{name}</title>
@@ -76,7 +76,7 @@ InteractiveZone.displayName = 'InteractiveZone';
 
 export const BodyModel: React.FC<BodyModelProps> = ({
   onSelect,
-  selectedPart,
+  selectedParts,
   side,
   onSideChange
 }) => {
@@ -159,6 +159,11 @@ export const BodyModel: React.FC<BodyModelProps> = ({
                 className="absolute inset-0 w-full h-full z-10 overflow-visible pointer-events-none"
                 preserveAspectRatio="xMidYMid meet"
               >
+                <defs>
+                  <filter id="glass-blur" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="6" />
+                  </filter>
+                </defs>
                 {/* ... further down inside the component */}
                 {BODY_PATHS.filter(path => {
                   return side === 'front' ? FRONT_PART_IDS.has(path.id) : !FRONT_PART_IDS.has(path.id);
@@ -169,7 +174,7 @@ export const BodyModel: React.FC<BodyModelProps> = ({
                     id={path.id}
                     name={path.name}
                     onClick={onSelect}
-                    isSelected={selectedPart === path.id}
+                    isSelected={selectedParts.includes(path.id)}
                   />
                 ))}
               </svg>
@@ -179,12 +184,11 @@ export const BodyModel: React.FC<BodyModelProps> = ({
 
         {/* Floating Labels Overlay */}
         <div className="absolute inset-0 pointer-events-none z-20">
-          {selectedPart && (
+          {selectedParts.length > 0 && (
             <div
-              className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-[var(--bg-surface)]/90 backdrop-blur-md text-[var(--text-primary)] px-4 py-2 rounded-full text-sm font-bold shadow-lg border border-[var(--brand)]/30 animate-in fade-in slide-in-from-bottom-2 duration-300 pointer-events-auto"
+              className="absolute top-4 left-4 bg-[var(--bg-surface)]/90 backdrop-blur-md text-[var(--text-primary)] px-4 py-2 rounded-xl text-sm font-bold shadow-lg border border-[var(--brand)]/30 animate-in fade-in slide-in-from-top-2 duration-300 pointer-events-auto"
             >
-              <span className="text-[var(--text-secondary)] font-bold mr-2">已選擇:</span>
-              {BODY_PART_LABELS[selectedPart]}
+              已選擇 {selectedParts.length} 個部位
             </div>
           )}
         </div>

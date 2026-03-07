@@ -4,7 +4,6 @@ import { getHistory, clearHistory } from '@/services/history';
 import { BODY_PART_LABELS, URGENCY_CONFIG } from '@/constants';
 import { cn } from '@/lib/utils';
 import { Trash2, Calendar, Activity, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/Button';
 
 interface HistoryListProps {
   onBack: () => void;
@@ -38,7 +37,7 @@ export const HistoryList: React.FC<HistoryListProps> = ({ onBack }) => {
     <div className="w-full h-full flex flex-col animate-in fade-in slide-in-from-right-4 duration-300">
       <div className="flex items-center justify-between mb-6 px-2">
         <div className="flex items-center gap-3">
-          <button 
+          <button
             onClick={onBack}
             className="p-2 -ml-2 rounded-full hover:bg-[var(--bg-surface-secondary)] transition-colors"
           >
@@ -46,9 +45,9 @@ export const HistoryList: React.FC<HistoryListProps> = ({ onBack }) => {
           </button>
           <h2 className="text-xl font-bold text-[var(--text-primary)]">分析紀錄</h2>
         </div>
-        
+
         {records.length > 0 && (
-          <button 
+          <button
             onClick={handleClear}
             className="p-2 rounded-full hover:bg-[var(--status-error-bg)] text-[var(--text-muted)] hover:text-[var(--status-error-text)] transition-colors"
             title="清除紀錄"
@@ -67,14 +66,14 @@ export const HistoryList: React.FC<HistoryListProps> = ({ onBack }) => {
         ) : (
           records.map((record, index) => {
             const urgency = URGENCY_CONFIG[record.analysisResult.urgency];
-            const bodyPartName = record.symptomData.bodyPart 
-              ? BODY_PART_LABELS[record.symptomData.bodyPart] 
+            const bodyPartNames = record.symptomData.bodyParts && record.symptomData.bodyParts.length > 0
+              ? record.symptomData.bodyParts.map(p => BODY_PART_LABELS[p] || p).join('、')
               : '未指定';
 
             return (
-              <div 
+              <div
                 key={record.id}
-                className="bg-[var(--bg-surface)] border border-[var(--border-light)] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow animate-in fade-in slide-in-from-bottom-2 fill-mode-backwards"
+                className="bg-[var(--bg-surface)] border border-[var(--border-light)] rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow animate-in fade-in slide-in-from-bottom-2 fill-mode-backwards"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="flex justify-between items-start mb-3">
@@ -95,10 +94,7 @@ export const HistoryList: React.FC<HistoryListProps> = ({ onBack }) => {
                 <div className="mb-3">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-sm font-bold text-[var(--text-primary)]">
-                      {bodyPartName}
-                    </span>
-                    <span className="text-xs text-[var(--text-muted)]">
-                      ({record.symptomData.side === 'front' ? '正面' : '背面'})
+                      {bodyPartNames}
                     </span>
                   </div>
                   <p className="text-sm text-[var(--text-secondary)] line-clamp-2">

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 interface ModalProps {
   isOpen: boolean;
@@ -30,7 +29,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }
         onClick={onClose}
         className="fixed inset-0 bg-[var(--bg-overlay)] backdrop-blur-sm animate-in fade-in duration-200"
       />
-      
+
       {/* Modal Content */}
       <div
         className="relative z-50 w-full max-w-sm bg-[var(--bg-surface)] rounded-2xl shadow-2xl overflow-hidden border border-[var(--border-light)] animate-in zoom-in-95 fade-in slide-in-from-bottom-2 duration-300"
@@ -39,7 +38,7 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }
           <h2 className="text-base font-semibold text-[var(--text-primary)]">
             {title || 'Modal'}
           </h2>
-          <button 
+          <button
             onClick={onClose}
             className="p-1.5 rounded-full hover:bg-[var(--bg-surface-tertiary)] transition-colors"
           >

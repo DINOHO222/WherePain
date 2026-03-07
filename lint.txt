@@ -1,0 +1,5 @@
+﻿src/components/BodyModel.tsx(6,1): error TS6133: 'BODY_PART_LABELS' is declared but its value is never read.
+src/components/HistoryList.tsx(7,1): error TS6133: 'Button' is declared but its value is never read.
+src/components/Modal.tsx(3,1): error TS6133: 'cn' is declared but its value is never read.
+src/hooks/useSymptomAnalysis.ts(11,10): error TS6133: 'symptomData' is declared but its value is never read.
+vite.config.ts(7,9): error TS6133: 'env' is declared but its value is never read.

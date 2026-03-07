@@ -6,14 +6,14 @@ import { Select } from '@/components/Select';
 import { BODY_PART_LABELS, DURATION_LABELS } from '@/constants';
 
 interface SymptomFormProps {
-  selectedPart: BodyPart;
+  selectedParts: BodyPart[];
   onSubmit: (data: SymptomData) => void;
   onCancel: () => void;
   isLoading: boolean;
 }
 
 export const SymptomForm: React.FC<SymptomFormProps> = ({
-  selectedPart,
+  selectedParts,
   onSubmit,
   onCancel,
   isLoading
@@ -25,20 +25,14 @@ export const SymptomForm: React.FC<SymptomFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
-      bodyPart: selectedPart,
-      // The side is now determined by the user's view choice before clicking the body part.
-      // We default this to front to satisfy the current SymptomData type, but we will
-      // eventually remove `side` entirely from the type or depend on the new toggle state.
-      // For now, to prevent compilation errors without changing too many types, we pass 'front'.
-      // Note: Ideally, the parent component passes down the current `viewSide`.
-      side: 'front',
+      bodyParts: selectedParts,
       painLevel: painLevel as PainLevel,
       duration,
       description
     });
   };
 
-  const bodyPartName = BODY_PART_LABELS[selectedPart] || selectedPart;
+  const bodyPartNames = selectedParts.map(p => BODY_PART_LABELS[p] || p).join('、');
 
   const durationOptions = Object.entries(DURATION_LABELS).map(([value, label]) => ({
     value,
@@ -48,9 +42,9 @@ export const SymptomForm: React.FC<SymptomFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-        <div className="bg-[var(--bg-surface-secondary)] p-3 rounded-xl border border-[var(--border-light)] inline-block min-w-[120px]">
+        <div className="bg-[var(--bg-surface-secondary)] p-3 rounded-2xl border border-[var(--border-light)] inline-block min-w-[120px]">
           <p className="text-xs text-[var(--text-muted)]">部位</p>
-          <p className="text-base font-bold text-[var(--text-primary)]">{bodyPartName}</p>
+          <p className="text-base font-bold text-[var(--text-primary)]">{bodyPartNames}</p>
         </div>
       </div>
 
@@ -87,7 +81,7 @@ export const SymptomForm: React.FC<SymptomFormProps> = ({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="例如：刺痛、悶痛..."
-          className="w-full min-h-[60px] h-[60px] rounded-xl border border-[var(--input-border)] bg-[var(--input-bg)] px-3 py-2 text-sm text-[var(--text-primary)] focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)] resize-none placeholder:text-[var(--input-placeholder)] transition-all"
+          className="w-full min-h-[60px] h-[60px] rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-3 py-2 text-sm text-[var(--text-primary)] focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)] resize-none placeholder:text-[var(--input-placeholder)] transition-all"
         />
       </div>
 

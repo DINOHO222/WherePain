@@ -7,11 +7,11 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   options: { value: string; label: string }[];
 }
 
-export const Select: React.FC<SelectProps> = ({ 
-  label, 
-  options, 
-  className, 
-  ...props 
+export const Select: React.FC<SelectProps> = ({
+  label,
+  options,
+  className,
+  ...props
 }) => {
   return (
     <div className="w-full space-y-1.5">
@@ -23,7 +23,7 @@ export const Select: React.FC<SelectProps> = ({
       <div className="relative">
         <select
           className={cn(
-            "w-full appearance-none rounded-xl border border-[var(--input-border)] bg-[var(--input-bg)] px-3 py-2.5 text-sm text-[var(--text-primary)] focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)] disabled:opacity-50",
+            "w-full appearance-none rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-3 py-2.5 text-sm text-[var(--text-primary)] focus:border-[var(--brand)] focus:outline-none focus:ring-1 focus:ring-[var(--brand)] disabled:opacity-50",
             className
           )}
           {...props}
