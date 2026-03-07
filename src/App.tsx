@@ -14,6 +14,8 @@ function AppContent() {
 
   const {
     step,
+    viewSide,
+    setViewSide,
     selectedPart,
     result,
     handleSelectPart,
@@ -67,6 +69,8 @@ function AppContent() {
               <BodyModel
                 onSelect={handleSelectPart}
                 selectedPart={selectedPart}
+                side={viewSide}
+                onSideChange={setViewSide}
               />
             </div>
           </div>

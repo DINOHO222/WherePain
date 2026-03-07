@@ -6,6 +6,8 @@ import { useToast } from '@/hooks/useToast';
 
 export function useSymptomAnalysis() {
   const [step, setStep] = useState<'selecting' | 'inputting' | 'analyzing' | 'result'>('selecting');
+  // Add state to track the visible side on the model
+  const [viewSide, setViewSide] = useState<'front' | 'back'>('front');
   const [selectedPart, setSelectedPart] = useState<BodyPart | null>(null);
   const [symptomData, setSymptomData] = useState<SymptomData | null>(null);
   const [result, setResult] = useState<AnalysisResult | null>(null);
@@ -17,11 +19,13 @@ export function useSymptomAnalysis() {
   };
 
   const handleInputSubmit = async (data: SymptomData) => {
-    setSymptomData(data);
+    // Inject the selected side directly from the hook state instead of asking the user explicitly
+    const finalData = { ...data, side: viewSide };
+    setSymptomData(finalData);
     setStep('analyzing');
 
     try {
-      const analysis = await analyzeSymptoms(data);
+      const analysis = await analyzeSymptoms(finalData);
       setResult(analysis);
       setStep('result');
 
@@ -29,7 +33,7 @@ export function useSymptomAnalysis() {
       saveHistory({
         id: crypto.randomUUID(),
         timestamp: new Date().toISOString(),
-        symptomData: data,
+        symptomData: finalData,
         analysisResult: analysis
       });
       toast.success('分析完成，已儲存至歷史紀錄');
@@ -53,6 +57,8 @@ export function useSymptomAnalysis() {
 
   return {
     step,
+    viewSide,
+    setViewSide,
     selectedPart,
     result,
     handleSelectPart,

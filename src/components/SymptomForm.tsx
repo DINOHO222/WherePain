@@ -3,7 +3,6 @@ import { BodyPart, Duration, PainLevel, SymptomData } from '@/types';
 import { Button } from '@/components/Button';
 import { Slider } from '@/components/Slider';
 import { Select } from '@/components/Select';
-import { cn } from '@/lib/utils';
 import { BODY_PART_LABELS, DURATION_LABELS } from '@/constants';
 
 interface SymptomFormProps {
@@ -13,22 +12,26 @@ interface SymptomFormProps {
   isLoading: boolean;
 }
 
-export const SymptomForm: React.FC<SymptomFormProps> = ({ 
-  selectedPart, 
-  onSubmit, 
+export const SymptomForm: React.FC<SymptomFormProps> = ({
+  selectedPart,
+  onSubmit,
   onCancel,
-  isLoading 
+  isLoading
 }) => {
   const [painLevel, setPainLevel] = useState<number>(5);
   const [duration, setDuration] = useState<Duration>('today');
   const [description, setDescription] = useState('');
-  const [side, setSide] = useState<'front' | 'back'>('front');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
       bodyPart: selectedPart,
-      side,
+      // The side is now determined by the user's view choice before clicking the body part.
+      // We default this to front to satisfy the current SymptomData type, but we will
+      // eventually remove `side` entirely from the type or depend on the new toggle state.
+      // For now, to prevent compilation errors without changing too many types, we pass 'front'.
+      // Note: Ideally, the parent component passes down the current `viewSide`.
+      side: 'front',
       painLevel: painLevel as PainLevel,
       duration,
       description
@@ -42,39 +45,16 @@ export const SymptomForm: React.FC<SymptomFormProps> = ({
     label
   }));
 
-  const sideOptions: { value: 'front' | 'back', label: string }[] = [
-    { value: 'front', label: '正面' },
-    { value: 'back', label: '背面' }
-  ];
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-2 gap-3 animate-in fade-in slide-in-from-bottom-2 duration-500">
-        <div className="bg-[var(--bg-surface-secondary)] p-3 rounded-xl border border-[var(--border-light)]">
+      <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <div className="bg-[var(--bg-surface-secondary)] p-3 rounded-xl border border-[var(--border-light)] inline-block min-w-[120px]">
           <p className="text-xs text-[var(--text-muted)]">部位</p>
           <p className="text-base font-bold text-[var(--text-primary)]">{bodyPartName}</p>
         </div>
-
-        <div className="flex bg-[var(--bg-surface-tertiary)] p-1 rounded-xl items-center">
-          {sideOptions.map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => setSide(option.value)}
-              className={cn(
-                "flex-1 py-1.5 text-xs font-bold rounded-lg transition-all h-full",
-                side === option.value
-                  ? "bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-sm ring-1 ring-black/5" 
-                  : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
-              )}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
       </div>
 
-      <div 
+      <div
         className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-backwards"
         style={{ animationDelay: '100ms' }}
       >
@@ -96,7 +76,7 @@ export const SymptomForm: React.FC<SymptomFormProps> = ({
         />
       </div>
 
-      <div 
+      <div
         className="space-y-1 animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-backwards"
         style={{ animationDelay: '200ms' }}
       >
@@ -111,22 +91,22 @@ export const SymptomForm: React.FC<SymptomFormProps> = ({
         />
       </div>
 
-      <div 
+      <div
         className="flex gap-3 pt-1 animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-backwards"
         style={{ animationDelay: '300ms' }}
       >
-        <Button 
-          type="button" 
-          variant="secondary" 
+        <Button
+          type="button"
+          variant="secondary"
           size="sm"
-          className="flex-1 h-9" 
+          className="flex-1 h-9"
           onClick={onCancel}
           disabled={isLoading}
         >
           取消
         </Button>
-        <Button 
-          type="submit" 
+        <Button
+          type="submit"
           size="sm"
           className="flex-1 h-9"
           isLoading={isLoading}
